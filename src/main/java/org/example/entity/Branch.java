@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Branch {
@@ -25,11 +26,22 @@ public class Branch {
     )
     private Address address;
 
+    @ManyToOne
+    private Bank bank;
+
     public Branch() {
     }
 
     public Branch(String name, Address address) {
         this.name = name;
         this.address = address;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
     }
 }
