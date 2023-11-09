@@ -44,9 +44,6 @@ public class Customer {
 
     @Embedded
     @AttributeOverrides({
-            @AttributeOverride(name = "country", column = @Column(name = "country")),
-            @AttributeOverride(name = "city", column = @Column(name = "city")),
-            @AttributeOverride(name = "street", column = @Column(name = "street")),
             @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code"))
     })
     private Address address;
