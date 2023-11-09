@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Entity
@@ -22,11 +23,22 @@ public class Loan {
 
     private BigDecimal amount;
 
+    @ManyToOne
+    private Branch branch;
+
     public Loan() {
     }
 
     public Loan(LoanType type, BigDecimal amount) {
         this.type = type;
         this.amount = amount;
+    }
+
+    public Branch getBranch() {
+        return branch;
+    }
+
+    public void setBranch(Branch branch) {
+        this.branch = branch;
     }
 }

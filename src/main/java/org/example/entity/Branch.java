@@ -36,6 +36,9 @@ public class Branch {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "branch")
     private Set<Account> accounts = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "branch")
+    private Set<Loan> loans = new HashSet<>();
+
     public Branch() {
     }
 
@@ -58,5 +61,13 @@ public class Branch {
 
     public void setAccounts(Set<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    public Set<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(Set<Loan> loans) {
+        this.loans = loans;
     }
 }
