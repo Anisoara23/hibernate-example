@@ -14,5 +14,6 @@
         <property name="hbm2ddl.auto">create</property>
         <mapping class="org.example.entity.Customer"/>
         <mapping class="org.example.entity.Bank"/>
+        <mapping class="org.example.entity.Branch"/>
     </session-factory>
 </hibernate-configuration>
