@@ -1,10 +1,9 @@
 package org.example.entity;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
+import org.hibernate.annotations.Check;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,8 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +25,7 @@ import java.util.Set;
 @Table(name = "customer", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"phone_number", "email"})
 })
+@Check(constraints = "length(IDNP) = 13")
 public class Customer {
 
     @Id
@@ -40,6 +44,13 @@ public class Customer {
     )
     private String lastName;
 
+    @Column(name = "birth_date", nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date birthDate;
+
+    @Column(name = "IDNP", nullable = false)
+    private String idnp;
+
     @Column(
             name = "phone_number",
             nullable = false
@@ -49,11 +60,8 @@ public class Customer {
     @Column(nullable = false)
     private String email;
 
-    @Embedded
-    @AttributeOverrides({
-            @AttributeOverride(name = "postalCode", column = @Column(name = "postal_code"))
-    })
-    private Address address;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
+    private CustomerInfo info;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "id.customer")
     private Set<CustomerAccount> accounts = new HashSet<>();
@@ -68,12 +76,13 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName, String phoneNumber, String email, Address address) {
+    public Customer(String firstName, String lastName, Date birthDate, String idnp, String phoneNumber, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.idnp = idnp;
         this.phoneNumber = phoneNumber;
         this.email = email;
-        this.address = address;
     }
 
     public Set<CustomerAccount> getAccounts() {
@@ -90,5 +99,13 @@ public class Customer {
 
     public void setLoans(Set<Loan> loans) {
         this.loans = loans;
+    }
+
+    public CustomerInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(CustomerInfo info) {
+        this.info = info;
     }
 }

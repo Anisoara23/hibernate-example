@@ -40,21 +40,21 @@ public class CustomerAccount {
         this.createdAt = createdAt;
     }
 
-    public void setCustomer(Customer customer){
+    public void setCustomer(Customer customer) {
         id.setCustomer(customer);
     }
 
     @Transient
-    public Customer getCustomer(){
+    public Customer getCustomer() {
         return id.getCustomer();
     }
 
-    public void setAccount(Account account){
+    public void setAccount(Account account) {
         id.setAccount(account);
     }
 
     @Transient
-    public Account getAccount(){
+    public Account getAccount() {
         return id.getAccount();
     }
 }
