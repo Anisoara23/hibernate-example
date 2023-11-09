@@ -17,5 +17,6 @@
         <mapping class="org.example.entity.Branch"/>
         <mapping class="org.example.entity.Account"/>
         <mapping class="org.example.entity.Loan"/>
+        <mapping class="org.example.entity.CustomerAccount"/>
     </session-factory>
 </hibernate-configuration>
