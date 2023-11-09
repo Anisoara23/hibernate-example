@@ -58,6 +58,13 @@ public class Customer {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "id.customer")
     private Set<CustomerAccount> accounts = new HashSet<>();
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "customer_loan",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "loan_id")
+    )
+    private Set<Loan> loans = new HashSet<>();
+
     public Customer() {
     }
 
@@ -75,5 +82,13 @@ public class Customer {
 
     public void setAccounts(Set<CustomerAccount> accounts) {
         this.accounts = accounts;
+    }
+
+    public Set<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(Set<Loan> loans) {
+        this.loans = loans;
     }
 }

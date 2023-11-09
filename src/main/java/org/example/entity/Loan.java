@@ -7,8 +7,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Loan {
@@ -26,6 +29,9 @@ public class Loan {
     @ManyToOne
     private Branch branch;
 
+    @ManyToMany(mappedBy = "loans")
+    private Set<Customer> customers = new HashSet<>();
+
     public Loan() {
     }
 
@@ -40,5 +46,13 @@ public class Loan {
 
     public void setBranch(Branch branch) {
         this.branch = branch;
+    }
+
+    public Set<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Set<Customer> customers) {
+        this.customers = customers;
     }
 }
