@@ -32,6 +32,10 @@ public class CustomerAccount {
     public CustomerAccount() {
     }
 
+    public CustomerAccount(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Date getCreatedAt() {
         return createdAt;
     }

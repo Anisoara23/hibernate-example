@@ -1,5 +1,6 @@
 package org.example.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,7 +27,7 @@ public class Loan {
 
     private BigDecimal amount;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL, optional = false)
     private Branch branch;
 
     @ManyToMany(mappedBy = "loans")

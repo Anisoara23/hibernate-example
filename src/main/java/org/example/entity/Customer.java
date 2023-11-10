@@ -67,7 +67,8 @@ public class Customer {
     private Set<CustomerAccount> accounts = new HashSet<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "customer_loan",
+    @JoinTable(
+            name = "customer_loan",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "loan_id")
     )

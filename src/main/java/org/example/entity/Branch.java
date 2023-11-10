@@ -30,7 +30,7 @@ public class Branch {
     )
     private Address address;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Bank bank;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "branch")
