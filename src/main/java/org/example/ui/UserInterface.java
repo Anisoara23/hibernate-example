@@ -23,7 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Scanner;
 
 import static org.example.entity.Gender.FEMALE;
@@ -236,7 +236,7 @@ public class UserInterface {
         System.out.println("Select the customer email: ");
         List<String> emails = customerDao.getEmails();
 
-        if (emails.isEmpty()){
+        if (emails.isEmpty()) {
             throw new IllegalStateException("No customers in the system!");
         }
 
@@ -289,7 +289,18 @@ public class UserInterface {
     }
 
     private Branch selectExistingBranch() {
-        return null;
+        System.out.println("Select branch code: ");
+        List<Map<Integer, String>> branches = branchDao.getBranches();
+
+        if (branches.isEmpty()) {
+            throw new IllegalStateException("No branches in the system!");
+        }
+
+        branches.forEach(System.out::println);
+        String id = scanner.nextLine();
+
+        return branchDao.getBranchById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Incorrect branch id!"));
     }
 
     private Bank getBank() {
@@ -330,13 +341,13 @@ public class UserInterface {
 
     private Bank selectExistingBank() {
         System.out.println("Select bank code: ");
-        List<String> bankCodes = bankDao.getBankCodes();
+        List<Map<String, String>> banks = bankDao.getBankCodes();
 
-        if (bankCodes.isEmpty()){
+        if (banks.isEmpty()) {
             throw new IllegalStateException("No banks in system");
         }
 
-        bankCodes.forEach(System.out::println);
+        banks.forEach(System.out::println);
         String code = scanner.nextLine();
 
         return bankDao.getBankByCode(code)
