@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Scanner;
 
 import static org.example.entity.Gender.FEMALE;
@@ -106,7 +107,7 @@ public class UserInterface {
             session.getTransaction().commit();
         } catch (RuntimeException e) {
             session.getTransaction().rollback();
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } finally {
             session.close();
         }
@@ -131,7 +132,7 @@ public class UserInterface {
             session.getTransaction().commit();
         } catch (RuntimeException e) {
             session.getTransaction().rollback();
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         } finally {
             session.close();
         }
@@ -231,7 +232,14 @@ public class UserInterface {
     }
 
     private Customer selectExistingCustomer() {
-        return null;
+        System.out.println("Select the customer email: ");
+        customerDao.getEmails()
+                .forEach(System.out::println);
+
+        String email = scanner.nextLine();
+
+        return customerDao.getCustomerByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Incorrect email"));
     }
 
     private Branch getBranch() {
