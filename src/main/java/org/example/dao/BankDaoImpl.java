@@ -1,7 +1,13 @@
 package org.example.dao;
 
 import org.example.entity.Bank;
+import org.hibernate.Query;
 import org.hibernate.classic.Session;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class BankDaoImpl implements BankDao {
 
@@ -12,7 +18,36 @@ public class BankDaoImpl implements BankDao {
     }
 
     @Override
-    public void addBank(Bank bank){
+    public void addBank(Bank bank) {
         session.save(bank);
+    }
+
+    @Override
+    public Optional<Bank> getBankByCode(String code) {
+        Query query = session.createQuery("SELECT b FROM Bank b WHERE b.code = :code");
+        query.setParameter("code", code);
+
+        List list = query.list();
+
+        if (list.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of((Bank) query.list().get(0));
+
+    }
+
+    @Override
+    public List<Map<String, String>> getBankCodes() {
+        List<Map<String, String>> mapList = new ArrayList<>();
+
+        Query query = session.createQuery("SELECT b FROM Bank b");
+        List<Bank> banks = query.list();
+
+        banks.forEach(
+                bank -> mapList.add(Map.of(bank.getCode(), bank.getName()))
+        );
+
+        return mapList;
     }
 }

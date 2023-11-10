@@ -53,4 +53,8 @@ public class Bank {
     public void setBranches(Set<Branch> branches) {
         this.branches = branches;
     }
+
+    public String getName() {
+        return name;
+    }
 }

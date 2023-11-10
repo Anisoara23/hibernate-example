@@ -27,11 +27,11 @@ public class CustomerDaoImpl implements CustomerDao {
 
         List list = query.list();
 
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             return Optional.empty();
-        } else {
-            return Optional.of((Customer) list.get(0));
         }
+
+        return Optional.of((Customer) list.get(0));
     }
 
     @Override

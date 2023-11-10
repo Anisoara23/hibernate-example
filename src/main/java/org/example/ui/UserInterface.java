@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -233,9 +234,13 @@ public class UserInterface {
 
     private Customer selectExistingCustomer() {
         System.out.println("Select the customer email: ");
-        customerDao.getEmails()
-                .forEach(System.out::println);
+        List<String> emails = customerDao.getEmails();
 
+        if (emails.isEmpty()){
+            throw new IllegalStateException("No customers in the system!");
+        }
+
+        emails.forEach(System.out::println);
         String email = scanner.nextLine();
 
         return customerDao.getCustomerByEmail(email)
@@ -324,6 +329,17 @@ public class UserInterface {
     }
 
     private Bank selectExistingBank() {
-        return null;
+        System.out.println("Select bank code: ");
+        List<String> bankCodes = bankDao.getBankCodes();
+
+        if (bankCodes.isEmpty()){
+            throw new IllegalStateException("No banks in system");
+        }
+
+        bankCodes.forEach(System.out::println);
+        String code = scanner.nextLine();
+
+        return bankDao.getBankByCode(code)
+                .orElseThrow(() -> new IllegalArgumentException("Incorrect bank code!"));
     }
 }
