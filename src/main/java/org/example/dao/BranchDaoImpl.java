@@ -23,7 +23,7 @@ public class BranchDaoImpl implements BranchDao {
     }
 
     @Override
-    public Optional<Branch> getBranchById(String id) {
+    public Optional<Branch> getBranchById(Integer id) {
         Query query = session.createQuery("SELECT b FROM Branch b WHERE id = :id");
         query.setParameter("id", id);
 

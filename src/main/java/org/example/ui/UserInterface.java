@@ -121,6 +121,7 @@ public class UserInterface {
         } catch (RuntimeException e) {
             session.getTransaction().rollback();
             System.out.println(e.getMessage());
+            e.printStackTrace();
         } finally {
             session.close();
         }
@@ -158,10 +159,12 @@ public class UserInterface {
         try {
             session.beginTransaction();
 
-            printLoansIdWithCustomers();
+            printIdsWithCustomers(
+                    "Select loan id to be deleted: ",
+                    loanDao.getCustomersWithLoansIds());
             String loanId = scanner.nextLine();
 
-            loanDao.removeLoan(loanId);
+            loanDao.removeLoanById(loanId);
             session.getTransaction().commit();
         } catch (RuntimeException e) {
             session.getTransaction().rollback();
@@ -169,18 +172,33 @@ public class UserInterface {
         } finally {
             session.close();
         }
-
-    }
-
-    private void printLoansIdWithCustomers() {
-        System.out.println("Select loan id to be removed: ");
-
-        List<CustomerFinancialProfile> customersWithLoansIds = loanDao.getCustomersWithLoansIds();
-        customersWithLoansIds.forEach(System.out::println);
     }
 
     private void removeAccount() {
+        try {
+            session.beginTransaction();
 
+            printIdsWithCustomers(
+                    "Select account id to be deleted: ",
+                    accountDao.getCustomersWithAccountIds());
+            String accountId = scanner.nextLine();
+
+            accountDao.removeAccountById(accountId);
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            session.getTransaction().rollback();
+            System.out.println(e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    private void printIdsWithCustomers(
+            String message,
+            List<CustomerFinancialProfile> customerFinancialProfiles
+    ) {
+        System.out.println(message);
+        customerFinancialProfiles.forEach(System.out::println);
     }
 
     private BigDecimal getAmount() {
@@ -343,7 +361,7 @@ public class UserInterface {
         branches.forEach(System.out::println);
         String id = scanner.nextLine();
 
-        return branchDao.getBranchById(id)
+        return branchDao.getBranchById(Integer.parseInt(id))
                 .orElseThrow(() -> new IllegalArgumentException("Incorrect branch id!"));
     }
 

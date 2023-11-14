@@ -13,6 +13,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "financial_profile")
@@ -33,11 +34,28 @@ public class FinancialProfile {
     public FinancialProfile() {
     }
 
+    public String getId() {
+        return id;
+    }
+
     public void setBranch(Branch branch) {
         this.branch = branch;
     }
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FinancialProfile that = (FinancialProfile) o;
+        return Objects.equals(id, that.id) && Objects.equals(branch, that.branch) && Objects.equals(amount, that.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, branch, amount);
     }
 }

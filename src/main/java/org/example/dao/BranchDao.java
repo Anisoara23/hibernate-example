@@ -10,7 +10,7 @@ public interface BranchDao {
 
     void addBranch(Branch branch);
 
-    Optional<Branch> getBranchById(String id);
+    Optional<Branch> getBranchById(Integer id);
 
     List<Map<Integer, String>> getBranches();
 }
