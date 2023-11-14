@@ -88,11 +88,14 @@ public class UserInterface {
     private void createAccount() {
         try {
             session.beginTransaction();
-            Account account = new Account(getType(AccountType.class), getAmount());
+            Account account = new Account(getType(AccountType.class));
+
+            BigDecimal amount = getAmount();
+            account.setAmount(amount);
 
             Branch branch = getBranch();
             account.setBranch(branch);
-            branch.getAccounts().add(account);
+            branch.getFinancialProfiles().add(account);
 
             Customer customer = getCustomer();
             customerDao.addCustomer(customer);
@@ -117,11 +120,14 @@ public class UserInterface {
     private void createLoan() {
         try {
             session.beginTransaction();
-            Loan loan = new Loan(getType(LoanType.class), getAmount());
+            Loan loan = new Loan(getType(LoanType.class));
+
+            BigDecimal amount = getAmount();
+            loan.setAmount(amount);
 
             Branch branch = getBranch();
             loan.setBranch(branch);
-            branch.getLoans().add(loan);
+            branch.getFinancialProfiles().add(loan);
 
             Customer customer = getCustomer();
             customerDao.addCustomer(customer);

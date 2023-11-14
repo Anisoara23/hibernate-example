@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CsvReader implements Reader{
+public class CsvReader implements Reader {
 
     private final String csvFile;
 

@@ -10,17 +10,17 @@ public class HibernateUtil {
     private static SessionFactory buildSessionFactory() {
         try {
             return new AnnotationConfiguration().configure().buildSessionFactory();
-        } catch (Throwable e){
+        } catch (Throwable e) {
             System.err.println("Initial SessionFactory creation failed. " + e);
             throw new ExceptionInInitializerError(e);
         }
     }
 
-    public static SessionFactory getSessionFactory(){
+    public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
-    public static void shutdown(){
+    public static void shutdown() {
         getSessionFactory().close();
     }
 }

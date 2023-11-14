@@ -11,7 +11,7 @@
         <property name="hibernate.connection.password">1234567</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="show_sql">true</property>
-        <property name="hbm2ddl.auto">create</property>
+        <property name="hbm2ddl.auto">update</property>
         <mapping class="org.example.entity.Customer"/>
         <mapping class="org.example.entity.Bank"/>
         <mapping class="org.example.entity.Branch"/>
@@ -19,5 +19,6 @@
         <mapping class="org.example.entity.Loan"/>
         <mapping class="org.example.entity.CustomerAccount"/>
         <mapping class="org.example.entity.CustomerInfo"/>
+        <mapping class="org.example.entity.FinancialProfile"/>
     </session-factory>
 </hibernate-configuration>

@@ -34,10 +34,7 @@ public class Branch {
     private Bank bank;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "branch")
-    private Set<Account> accounts = new HashSet<>();
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "branch")
-    private Set<Loan> loans = new HashSet<>();
+    private Set<FinancialProfile> financialProfiles = new HashSet<>();
 
     public Branch() {
     }
@@ -79,19 +76,11 @@ public class Branch {
         this.bank = bank;
     }
 
-    public Set<Account> getAccounts() {
-        return accounts;
+    public void setFinancialProfiles(Set<FinancialProfile> financialProfiles) {
+        this.financialProfiles = financialProfiles;
     }
 
-    public void setAccounts(Set<Account> accounts) {
-        this.accounts = accounts;
-    }
-
-    public Set<Loan> getLoans() {
-        return loans;
-    }
-
-    public void setLoans(Set<Loan> loans) {
-        this.loans = loans;
+    public Set<FinancialProfile> getFinancialProfiles() {
+        return financialProfiles;
     }
 }
