@@ -63,10 +63,10 @@ public class Customer {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
     private CustomerInfo info;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id.customer")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "id.customer")
     private Set<CustomerAccount> accounts = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "customer_loan",
             joinColumns = @JoinColumn(name = "customer_id"),

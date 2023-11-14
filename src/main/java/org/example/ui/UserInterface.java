@@ -16,6 +16,7 @@ import org.example.entity.CustomerAccount;
 import org.example.entity.CustomerInfo;
 import org.example.entity.Loan;
 import org.example.entity.LoanType;
+import org.example.pojo.CustomerFinancialProfile;
 import org.hibernate.classic.Session;
 
 import java.math.BigDecimal;
@@ -70,6 +71,8 @@ public class UserInterface {
         System.out.println("\nPlease choose an option: ");
         System.out.println("1. Apply for a Loan;");
         System.out.println("2. Apply for an Account;");
+        System.out.println("3. Remove a Loan;");
+        System.out.println("4. Remove an Account;");
 
         String option = scanner.nextLine();
 
@@ -79,6 +82,12 @@ public class UserInterface {
                 break;
             case "2":
                 createAccount();
+                break;
+            case "3":
+                removeLoan();
+                break;
+            case "4":
+                removeAccount();
                 break;
             default:
                 System.out.println("No such option!");
@@ -143,6 +152,35 @@ public class UserInterface {
         } finally {
             session.close();
         }
+    }
+
+    private void removeLoan() {
+        try {
+            session.beginTransaction();
+
+            printLoansIdWithCustomers();
+            String loanId = scanner.nextLine();
+
+            loanDao.removeLoan(loanId);
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            session.getTransaction().rollback();
+            System.out.println(e.getMessage());
+        } finally {
+            session.close();
+        }
+
+    }
+
+    private void printLoansIdWithCustomers() {
+        System.out.println("Select loan id to be removed: ");
+
+        List<CustomerFinancialProfile> customersWithLoansIds = loanDao.getCustomersWithLoansIds();
+        customersWithLoansIds.forEach(System.out::println);
+    }
+
+    private void removeAccount() {
+
     }
 
     private BigDecimal getAmount() {
