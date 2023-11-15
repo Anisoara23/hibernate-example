@@ -73,183 +73,141 @@ public class UserInterface {
     }
 
     public void displayUserInterface() {
-        System.out.println("\nPlease choose an option: ");
-        System.out.println("1. Apply for a Loan;");
-        System.out.println("2. Apply for an Account;");
-        System.out.println("3. Remove a Loan;");
-        System.out.println("4. Remove an Account;");
-        System.out.println("5. Update Loan amount;");
-        System.out.println("6. Update Account amount;");
+        boolean continueLoop = true;
+        while (continueLoop) {
+            try {
+                session.beginTransaction();
+                System.out.println("\nPlease choose an option: ");
+                System.out.println("1. Apply for a Loan;");
+                System.out.println("2. Apply for an Account;");
+                System.out.println("3. Remove a Loan;");
+                System.out.println("4. Remove an Account;");
+                System.out.println("5. Update Loan amount;");
+                System.out.println("6. Update Account amount;");
+                System.out.println("8. Exit.");
 
-        String option = scanner.nextLine();
+                String option = scanner.nextLine();
 
-        switch (option) {
-            case "1":
-                createLoan();
-                break;
-            case "2":
-                createAccount();
-                break;
-            case "3":
-                removeLoan();
-                break;
-            case "4":
-                removeAccount();
-                break;
-            case "5":
-                updateLoanAmount();
-                break;
-            case "6":
-                updateAccountAmount();
-                break;
-            default:
-                System.out.println("No such option!");
+                switch (option) {
+                    case "1":
+                        createLoan();
+                        break;
+                    case "2":
+                        createAccount();
+                        break;
+                    case "3":
+                        removeLoan();
+                        break;
+                    case "4":
+                        removeAccount();
+                        break;
+                    case "5":
+                        updateLoanAmount();
+                        break;
+                    case "6":
+                        updateAccountAmount();
+                        break;
+                    case "7":
+                        continueLoop = false;
+                        break;
+                    default:
+                        System.out.println("No such option!");
+                }
+                session.getTransaction().commit();
+            } catch (RuntimeException e) {
+                session.getTransaction().rollback();
+                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
         }
+        session.close();
     }
 
     private void createAccount() {
-        try {
-            session.beginTransaction();
-            Account account = new Account(getType(AccountType.class));
+        Account account = new Account(getType(AccountType.class));
 
-            BigDecimal amount = getAmount();
-            account.setAmount(amount);
+        BigDecimal amount = getAmount();
+        account.setAmount(amount);
 
-            Branch branch = getBranch();
-            account.setBranch(branch);
-            branch.getFinancialProfiles().add(account);
+        Branch branch = getBranch();
+        account.setBranch(branch);
+        branch.getFinancialProfiles().add(account);
 
-            Customer customer = getCustomer();
-            customerDao.addCustomer(customer);
+        Customer customer = getCustomer();
+        customerDao.addCustomer(customer);
 
-            CustomerAccount customerAccount = new CustomerAccount(new Date());
-            customerAccount.setAccount(account);
-            customerAccount.setCustomer(customer);
+        CustomerAccount customerAccount = new CustomerAccount(new Date());
+        customerAccount.setAccount(account);
+        customerAccount.setCustomer(customer);
 
-            account.getCustomers().add(customerAccount);
-            customer.getAccounts().add(customerAccount);
-            accountDao.addAccount(account);
-
-            session.getTransaction().commit();
-        } catch (RuntimeException e) {
-            session.getTransaction().rollback();
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
+        account.getCustomers().add(customerAccount);
+        customer.getAccounts().add(customerAccount);
+        accountDao.addAccount(account);
     }
 
     private void createLoan() {
-        try {
-            session.beginTransaction();
-            Loan loan = new Loan(getType(LoanType.class));
+        Loan loan = new Loan(getType(LoanType.class));
 
-            BigDecimal amount = getAmount();
-            loan.setAmount(amount);
+        BigDecimal amount = getAmount();
+        loan.setAmount(amount);
 
-            Branch branch = getBranch();
-            loan.setBranch(branch);
-            branch.getFinancialProfiles().add(loan);
+        Branch branch = getBranch();
+        loan.setBranch(branch);
+        branch.getFinancialProfiles().add(loan);
 
-            Customer customer = getCustomer();
-            customerDao.addCustomer(customer);
+        Customer customer = getCustomer();
+        customerDao.addCustomer(customer);
 
-            customer.getLoans().add(loan);
-            loan.getCustomers().add(customer);
+        customer.getLoans().add(loan);
+        loan.getCustomers().add(customer);
 
-            loanDao.addLoan(loan);
-            session.getTransaction().commit();
-        } catch (RuntimeException e) {
-            session.getTransaction().rollback();
-            System.out.println(e.getMessage());
-        } finally {
-            session.close();
-        }
+        loanDao.addLoan(loan);
     }
 
     private void removeLoan() {
-        try {
-            session.beginTransaction();
+        printIdsWithCustomers(
+                "Select loan id to be deleted: ",
+                loanDao.getCustomersWithLoansIds());
+        String loanId = scanner.nextLine();
 
-            printIdsWithCustomers(
-                    "Select loan id to be deleted: ",
-                    loanDao.getCustomersWithLoansIds());
-            String loanId = scanner.nextLine();
-
-            loanDao.removeLoanById(loanId);
-            session.getTransaction().commit();
-        } catch (RuntimeException e) {
-            session.getTransaction().rollback();
-            System.out.println(e.getMessage());
-        } finally {
-            session.close();
-        }
+        loanDao.removeLoanById(loanId);
     }
 
     private void removeAccount() {
-        try {
-            session.beginTransaction();
+        printIdsWithCustomers(
+                "Select account id to be deleted: ",
+                accountDao.getCustomersWithAccountIds());
+        String accountId = scanner.nextLine();
 
-            printIdsWithCustomers(
-                    "Select account id to be deleted: ",
-                    accountDao.getCustomersWithAccountIds());
-            String accountId = scanner.nextLine();
-
-            accountDao.removeAccountById(accountId);
-            session.getTransaction().commit();
-        } catch (RuntimeException e) {
-            session.getTransaction().rollback();
-            System.out.println(e.getMessage());
-        } finally {
-            session.close();
-        }
+        accountDao.removeAccountById(accountId);
     }
 
     private void updateLoanAmount() {
-        try {
-            session.beginTransaction();
-            List<CustomerFinancialProfile> customersWithLoansIds = loanDao.getCustomersWithLoansIds();
+        List<CustomerFinancialProfile> customersWithLoansIds = loanDao.getCustomersWithLoansIds();
 
-            if (customersWithLoansIds.isEmpty()){
-                throw new IllegalStateException("No loans in the system!");
-            }
-
-            printIdsWithCustomers(
-                    "Select Loan to be updated:",
-                    customersWithLoansIds);
-
-            updateAmount();
-            session.getTransaction().commit();
-        } catch (RuntimeException e) {
-            session.getTransaction().rollback();
-            System.out.println(e.getMessage());
-        } finally {
-            session.close();
+        if (customersWithLoansIds.isEmpty()) {
+            throw new IllegalStateException("No loans in the system!");
         }
+
+        printIdsWithCustomers(
+                "Select Loan to be updated:",
+                customersWithLoansIds);
+
+        updateAmount();
     }
 
     private void updateAccountAmount() {
-        try {
-            session.beginTransaction();
-            List<CustomerFinancialProfile> customersWithAccountIds = accountDao.getCustomersWithAccountIds();
+        List<CustomerFinancialProfile> customersWithAccountIds = accountDao.getCustomersWithAccountIds();
 
-            if (customersWithAccountIds.isEmpty()){
-                throw new IllegalStateException("No accounts in the system!");
-            }
-
-            printIdsWithCustomers(
-                    "Select Account to be updated:",
-                    customersWithAccountIds);
-
-            updateAmount();
-            session.getTransaction().commit();
-        } catch (RuntimeException e) {
-            session.getTransaction().rollback();
-            System.out.println(e.getMessage());
-        } finally {
-            session.close();
+        if (customersWithAccountIds.isEmpty()) {
+            throw new IllegalStateException("No accounts in the system!");
         }
+
+        printIdsWithCustomers(
+                "Select Account to be updated:",
+                customersWithAccountIds);
+
+        updateAmount();
     }
 
     private void updateAmount() {
