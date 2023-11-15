@@ -33,4 +33,12 @@ public class FinancialProfileDaoImpl implements FinancialProfileDao {
 
         return query.executeUpdate();
     }
+
+    @Override
+    public boolean existsFinancialProfileById(String id) {
+        Query query = session.createQuery("SELECT 1 FROM FinancialProfile WHERE id = :id");
+        query.setParameter("id", id);
+
+        return query.uniqueResult() != null;
+    }
 }

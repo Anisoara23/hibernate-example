@@ -7,4 +7,6 @@ public interface FinancialProfileDao {
     BigDecimal getLoanAmount(String id);
 
     int updateAmount(String id, BigDecimal newAmount);
+
+    boolean existsFinancialProfileById(String id);
 }

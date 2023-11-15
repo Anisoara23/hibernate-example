@@ -117,7 +117,6 @@ public class UserInterface {
             } catch (RuntimeException e) {
                 session.getTransaction().rollback();
                 System.out.println(e.getMessage());
-                e.printStackTrace();
             }
         }
         session.close();
@@ -212,6 +211,10 @@ public class UserInterface {
 
     private void updateAmount() {
         String id = scanner.nextLine();
+
+        if (!financialProfileDao.existsFinancialProfileById(id)){
+            throw new IllegalArgumentException("No financial profile with id = %s!".formatted(id));
+        }
 
         BigDecimal amount = financialProfileDao.getLoanAmount(id);
         System.out.println("Initial amount = " + amount);
