@@ -1,6 +1,8 @@
 package org.example.entity;
 
-import javax.persistence.CascadeType;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,7 +19,8 @@ public class Account extends FinancialProfile {
     @Enumerated(value = EnumType.STRING)
     private AccountType type;
 
-    @OneToMany(mappedBy = "id.account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "id.account", fetch = FetchType.LAZY)
+    @Cascade(value = CascadeType.ALL)
     private Set<CustomerAccount> customers = new HashSet<>();
 
     public Account() {

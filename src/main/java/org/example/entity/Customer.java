@@ -1,8 +1,9 @@
 package org.example.entity;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Check;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -61,7 +62,8 @@ public class Customer {
     @Column(nullable = false)
     private String email;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "customer")
+    @OneToOne(mappedBy = "customer")
+    @Cascade(value = CascadeType.ALL)
     private CustomerInfo info;
 
     @OneToMany(mappedBy = "id.customer")
