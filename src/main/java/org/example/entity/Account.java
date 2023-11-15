@@ -42,13 +42,4 @@ public class Account extends FinancialProfile {
     public void setType(AccountType type) {
         this.type = type;
     }
-
-    public void removeCustomersAccountAssociations() {
-        for (CustomerAccount customerAccount : customers) {
-            if (customerAccount.getAccount().equals(this)) {
-                customerAccount.getCustomer().getAccounts().remove(customerAccount);
-                customerAccount.setAccount(null);
-            }
-        }
-    }
 }
