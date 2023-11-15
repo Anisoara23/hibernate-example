@@ -113,7 +113,9 @@ public class UserInterface {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
             } finally {
-                session.close();
+                if (session != null) {
+                    session.close();
+                }
                 HibernateUtil.shutdown();
             }
         }
