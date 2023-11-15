@@ -1,5 +1,6 @@
 package org.example.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,7 +17,7 @@ public class Loan extends FinancialProfile {
     @Enumerated(value = EnumType.STRING)
     private LoanType type;
 
-    @ManyToMany(mappedBy = "loans", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "loans", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private Set<Customer> customers = new HashSet<>();
 
     public Loan() {

@@ -1,12 +1,17 @@
 package org.example.ui;
 
 import org.example.dao.AccountDao;
+import org.example.dao.AccountDaoImpl;
 import org.example.dao.BankDao;
+import org.example.dao.BankDaoImpl;
 import org.example.dao.BranchDao;
+import org.example.dao.BranchDaoImpl;
 import org.example.dao.CustomerDao;
-import org.example.dao.CustomerInfoDao;
+import org.example.dao.CustomerDaoImpl;
 import org.example.dao.FinancialProfileDao;
+import org.example.dao.FinancialProfileDaoImpl;
 import org.example.dao.LoanDao;
+import org.example.dao.LoanDaoImpl;
 import org.example.entity.Account;
 import org.example.entity.AccountType;
 import org.example.entity.Address;
@@ -18,6 +23,7 @@ import org.example.entity.CustomerInfo;
 import org.example.entity.Loan;
 import org.example.entity.LoanType;
 import org.example.pojo.CustomerFinancialProfile;
+import org.example.util.HibernateUtil;
 import org.hibernate.classic.Session;
 
 import java.math.BigDecimal;
@@ -34,48 +40,36 @@ import static org.example.ui.TypeManager.getType;
 
 public class UserInterface {
 
-    private final Session session;
+    private Session session;
 
-    private final BankDao bankDao;
+    private BankDao bankDao;
 
-    private final BranchDao branchDao;
+    private BranchDao branchDao;
 
-    private final AccountDao accountDao;
+    private AccountDao accountDao;
 
-    private final LoanDao loanDao;
+    private LoanDao loanDao;
 
-    private final CustomerDao customerDao;
+    private CustomerDao customerDao;
 
-    private final CustomerInfoDao customerInfoDao;
+    private FinancialProfileDao financialProfileDao;
 
-    private final FinancialProfileDao financialProfileDao;
-
-    private final Scanner scanner;
-
-    public UserInterface(Session session,
-                         BankDao bankDao,
-                         BranchDao branchDao,
-                         AccountDao accountDao,
-                         LoanDao loanDao,
-                         CustomerDao customerDao,
-                         CustomerInfoDao customerInfoDao,
-                         FinancialProfileDao financialProfileDao,
-                         Scanner scanner) {
-        this.session = session;
-        this.bankDao = bankDao;
-        this.branchDao = branchDao;
-        this.accountDao = accountDao;
-        this.loanDao = loanDao;
-        this.customerDao = customerDao;
-        this.customerInfoDao = customerInfoDao;
-        this.financialProfileDao = financialProfileDao;
-        this.scanner = scanner;
-    }
+    private final Scanner scanner = new Scanner(System.in);
+    ;
 
     public void displayUserInterface() {
         boolean continueLoop = true;
         while (continueLoop) {
             try {
+                session = HibernateUtil.getSessionFactory().openSession();
+
+                accountDao = new AccountDaoImpl(session);
+                bankDao = new BankDaoImpl(session);
+                branchDao = new BranchDaoImpl(session);
+                customerDao = new CustomerDaoImpl(session);
+                loanDao = new LoanDaoImpl(session);
+                financialProfileDao = new FinancialProfileDaoImpl(session);
+
                 session.beginTransaction();
                 System.out.println("\nPlease choose an option: ");
                 System.out.println("1. Apply for a Loan;");
@@ -84,7 +78,7 @@ public class UserInterface {
                 System.out.println("4. Remove an Account;");
                 System.out.println("5. Update Loan amount;");
                 System.out.println("6. Update Account amount;");
-                System.out.println("8. Exit.");
+                System.out.println("7. Exit.");
 
                 String option = scanner.nextLine();
 
@@ -117,9 +111,12 @@ public class UserInterface {
             } catch (RuntimeException e) {
                 session.getTransaction().rollback();
                 System.out.println(e.getMessage());
+                e.printStackTrace();
+            } finally {
+                session.close();
+                HibernateUtil.shutdown();
             }
         }
-        session.close();
     }
 
     private void createAccount() {
@@ -129,6 +126,7 @@ public class UserInterface {
         account.setAmount(amount);
 
         Branch branch = getBranch();
+        branchDao.addBranch(branch);
         account.setBranch(branch);
         branch.getFinancialProfiles().add(account);
 
@@ -151,6 +149,7 @@ public class UserInterface {
         loan.setAmount(amount);
 
         Branch branch = getBranch();
+        branchDao.addBranch(branch);
         loan.setBranch(branch);
         branch.getFinancialProfiles().add(loan);
 
@@ -212,7 +211,7 @@ public class UserInterface {
     private void updateAmount() {
         String id = scanner.nextLine();
 
-        if (!financialProfileDao.existsFinancialProfileById(id)){
+        if (!financialProfileDao.existsFinancialProfileById(id)) {
             throw new IllegalArgumentException("No financial profile with id = %s!".formatted(id));
         }
 
@@ -376,6 +375,7 @@ public class UserInterface {
 
         Address address = new Address(country, city, street, postalCode);
         Branch branch = new Branch(name, address);
+        bankDao.addBank(bank);
         branch.setBank(bank);
         bank.getBranches().add(branch);
 
