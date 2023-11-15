@@ -5,6 +5,7 @@ import org.example.dao.BankDao;
 import org.example.dao.BranchDao;
 import org.example.dao.CustomerDao;
 import org.example.dao.CustomerInfoDao;
+import org.example.dao.FinancialProfileDao;
 import org.example.dao.LoanDao;
 import org.example.entity.Account;
 import org.example.entity.AccountType;
@@ -47,6 +48,8 @@ public class UserInterface {
 
     private final CustomerInfoDao customerInfoDao;
 
+    private final FinancialProfileDao financialProfileDao;
+
     private final Scanner scanner;
 
     public UserInterface(Session session,
@@ -56,6 +59,7 @@ public class UserInterface {
                          LoanDao loanDao,
                          CustomerDao customerDao,
                          CustomerInfoDao customerInfoDao,
+                         FinancialProfileDao financialProfileDao,
                          Scanner scanner) {
         this.session = session;
         this.bankDao = bankDao;
@@ -64,6 +68,7 @@ public class UserInterface {
         this.loanDao = loanDao;
         this.customerDao = customerDao;
         this.customerInfoDao = customerInfoDao;
+        this.financialProfileDao = financialProfileDao;
         this.scanner = scanner;
     }
 
@@ -73,6 +78,8 @@ public class UserInterface {
         System.out.println("2. Apply for an Account;");
         System.out.println("3. Remove a Loan;");
         System.out.println("4. Remove an Account;");
+        System.out.println("5. Update Loan amount;");
+        System.out.println("6. Update Account amount;");
 
         String option = scanner.nextLine();
 
@@ -88,6 +95,12 @@ public class UserInterface {
                 break;
             case "4":
                 removeAccount();
+                break;
+            case "5":
+                updateLoanAmount();
+                break;
+            case "6":
+                updateAccountAmount();
                 break;
             default:
                 System.out.println("No such option!");
@@ -191,6 +204,64 @@ public class UserInterface {
         } finally {
             session.close();
         }
+    }
+
+    private void updateLoanAmount() {
+        try {
+            session.beginTransaction();
+            List<CustomerFinancialProfile> customersWithLoansIds = loanDao.getCustomersWithLoansIds();
+
+            if (customersWithLoansIds.isEmpty()){
+                throw new IllegalStateException("No loans in the system!");
+            }
+
+            printIdsWithCustomers(
+                    "Select Loan to be updated:",
+                    customersWithLoansIds);
+
+            updateAmount();
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            session.getTransaction().rollback();
+            System.out.println(e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    private void updateAccountAmount() {
+        try {
+            session.beginTransaction();
+            List<CustomerFinancialProfile> customersWithAccountIds = accountDao.getCustomersWithAccountIds();
+
+            if (customersWithAccountIds.isEmpty()){
+                throw new IllegalStateException("No accounts in the system!");
+            }
+
+            printIdsWithCustomers(
+                    "Select Account to be updated:",
+                    customersWithAccountIds);
+
+            updateAmount();
+            session.getTransaction().commit();
+        } catch (RuntimeException e) {
+            session.getTransaction().rollback();
+            System.out.println(e.getMessage());
+        } finally {
+            session.close();
+        }
+    }
+
+    private void updateAmount() {
+        String id = scanner.nextLine();
+
+        BigDecimal amount = financialProfileDao.getLoanAmount(id);
+        System.out.println("Initial amount = " + amount);
+
+        System.out.println("Introduce new amount: ");
+        BigDecimal newAmount = new BigDecimal(scanner.nextLine());
+
+        financialProfileDao.updateAmount(id, newAmount);
     }
 
     private void printIdsWithCustomers(
