@@ -26,7 +26,7 @@ public class FinancialProfile {
     @Column(name = "id")
     private String id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Branch branch;
 
     private BigDecimal amount;

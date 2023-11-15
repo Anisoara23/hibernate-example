@@ -31,7 +31,7 @@ public class Bank {
     })
     private Address address;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "bank")
+    @OneToMany(mappedBy = "bank")
     private Set<Branch> branches = new HashSet<>();
 
     public Bank() {

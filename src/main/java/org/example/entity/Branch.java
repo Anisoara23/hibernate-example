@@ -30,10 +30,10 @@ public class Branch {
     )
     private Address address;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Bank bank;
 
-    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "branch")
+    @OneToMany(mappedBy = "branch")
     private Set<FinancialProfile> financialProfiles = new HashSet<>();
 
     public Branch() {

@@ -17,7 +17,7 @@ public class Loan extends FinancialProfile {
     @Enumerated(value = EnumType.STRING)
     private LoanType type;
 
-    @ManyToMany(mappedBy = "loans", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "loans", fetch = FetchType.LAZY)
     private Set<Customer> customers = new HashSet<>();
 
     public Loan() {
