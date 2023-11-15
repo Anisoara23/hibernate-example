@@ -126,7 +126,6 @@ public class UserInterface {
         account.setAmount(amount);
 
         Branch branch = getBranch();
-        branchDao.addBranch(branch);
         account.setBranch(branch);
         branch.getFinancialProfiles().add(account);
 
@@ -149,7 +148,6 @@ public class UserInterface {
         loan.setAmount(amount);
 
         Branch branch = getBranch();
-        branchDao.addBranch(branch);
         loan.setBranch(branch);
         branch.getFinancialProfiles().add(loan);
 
@@ -375,7 +373,7 @@ public class UserInterface {
 
         Address address = new Address(country, city, street, postalCode);
         Branch branch = new Branch(name, address);
-        bankDao.addBank(bank);
+//        bankDao.addBank(bank);
         branch.setBank(bank);
         bank.getBranches().add(branch);
 

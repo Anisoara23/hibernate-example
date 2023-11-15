@@ -1,5 +1,8 @@
 package org.example.entity;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -31,6 +34,7 @@ public class Branch {
     private Address address;
 
     @ManyToOne
+    @Cascade(value = CascadeType.SAVE_UPDATE)
     private Bank bank;
 
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)

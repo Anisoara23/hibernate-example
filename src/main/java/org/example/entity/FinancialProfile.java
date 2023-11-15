@@ -1,5 +1,7 @@
 package org.example.entity;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
@@ -26,6 +28,7 @@ public class FinancialProfile {
     private String id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @Cascade(value = CascadeType.SAVE_UPDATE)
     private Branch branch;
 
     private BigDecimal amount;
