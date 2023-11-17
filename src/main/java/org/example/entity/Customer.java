@@ -1,9 +1,12 @@
 package org.example.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Check;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,6 +31,8 @@ import java.util.Set;
         @UniqueConstraint(columnNames = {"phone_number", "email"})
 })
 @Check(constraints = "length(IDNP) = 13")
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "customer")
 public class Customer {
 
     @Id
@@ -75,6 +80,7 @@ public class Customer {
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "loan_id")
     )
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "loan")
     private Set<Loan> loans = new HashSet<>();
 
     public Customer() {

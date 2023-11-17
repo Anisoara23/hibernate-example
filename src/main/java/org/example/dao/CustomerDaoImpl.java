@@ -24,6 +24,8 @@ public class CustomerDaoImpl implements CustomerDao {
     public Optional<Customer> getCustomerByEmail(String email) {
         Query query = session.createQuery("SELECT c FROM Customer c WHERE c.email = :email");
         query.setParameter("email", email);
+        query.setCacheable(true);
+        query.setCacheRegion("customer");
 
         List list = query.list();
 
@@ -37,6 +39,9 @@ public class CustomerDaoImpl implements CustomerDao {
     @Override
     public List<String> getEmails() {
         Query query = session.createQuery("SELECT c.email FROM Customer c");
+        query.setCacheable(true);
+        query.setCacheRegion("customer");
+
         return query.list();
     }
 }
