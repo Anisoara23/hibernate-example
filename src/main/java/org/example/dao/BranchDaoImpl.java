@@ -26,6 +26,8 @@ public class BranchDaoImpl implements BranchDao {
     public Optional<Branch> getBranchById(Integer id) {
         Query query = session.createQuery("SELECT b FROM Branch b WHERE id = :id");
         query.setParameter("id", id);
+        query.setCacheable(true);
+        query.setCacheRegion("branch");
 
         List list = query.list();
 
@@ -40,6 +42,9 @@ public class BranchDaoImpl implements BranchDao {
     public List<Map<Integer, String>> getBranches() {
         List<Map<Integer, String>> mapList = new ArrayList<>();
         Query query = session.createQuery("SELECT b FROM Branch b");
+        query.setCacheable(true);
+        query.setCacheRegion("branch");
+
         List<Branch> branches = query.list();
 
         branches.forEach(

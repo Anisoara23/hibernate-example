@@ -1,9 +1,12 @@
 package org.example.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +22,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "financial_profile")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "financial_profile")
 public class FinancialProfile {
 
     @Id

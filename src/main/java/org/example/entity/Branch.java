@@ -1,10 +1,13 @@
 package org.example.entity;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -18,6 +21,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "branch")
 public class Branch {
 
     @Id
@@ -38,6 +43,7 @@ public class Branch {
     private Bank bank;
 
     @OneToMany(mappedBy = "branch", fetch = FetchType.LAZY)
+    @Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "financial_profile")
     private Set<FinancialProfile> financialProfiles = new HashSet<>();
 
     public Branch() {
