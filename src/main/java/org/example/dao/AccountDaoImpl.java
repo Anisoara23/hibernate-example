@@ -36,9 +36,12 @@ public class AccountDaoImpl implements AccountDao {
 
     @Override
     public void removeAccountById(String id) {
-        Query query = session.createQuery("DELETE FROM Account a WHERE id = :id");
-        query.setParameter("id", id);
+        Query selectAccount = session.createQuery("SELECT a FROM Account a WHERE id = :id");
+        selectAccount.setParameter("id", id);
 
-        query.executeUpdate();
+        if (!selectAccount.list().isEmpty()) {
+            Account account = (Account) selectAccount.list().get(0);
+            session.delete(account);
+        }
     }
 }
