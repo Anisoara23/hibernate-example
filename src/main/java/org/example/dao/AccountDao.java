@@ -11,5 +11,5 @@ public interface AccountDao {
 
     List<CustomerFinancialProfile> getCustomersWithAccountIds();
 
-    public void removeAccountById(String id);
+    void removeAccountById(String id);
 }

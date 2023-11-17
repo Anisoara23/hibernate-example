@@ -37,13 +37,9 @@ public class LoanDaoImpl implements LoanDao {
 
     @Override
     public void removeLoanById(String id) {
-        Query selectQuery = session.createQuery("SELECT l FROM Loan l WHERE id = :id");
-        selectQuery.setParameter("id", id);
+        Query query = session.createQuery("DELETE FROM Loan l WHERE id = :id");
+        query.setParameter("id", id);
 
-        if (!selectQuery.list().isEmpty()) {
-            Loan loan = (Loan) selectQuery.list().get(0);
-            loan.removeCustomersAssociation();
-            session.delete(loan);
-        }
+        query.executeUpdate();
     }
 }
