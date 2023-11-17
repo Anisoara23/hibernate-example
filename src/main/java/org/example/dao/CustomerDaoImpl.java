@@ -2,7 +2,7 @@ package org.example.dao;
 
 import org.example.entity.Customer;
 import org.hibernate.Query;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import java.util.List;
 import java.util.Optional;

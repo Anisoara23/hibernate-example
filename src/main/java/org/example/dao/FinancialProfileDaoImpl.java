@@ -1,7 +1,7 @@
 package org.example.dao;
 
 import org.hibernate.Query;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import java.math.BigDecimal;
 

@@ -2,7 +2,7 @@ package org.example.dao;
 
 import org.example.entity.Branch;
 import org.hibernate.Query;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package org.example.dao;
 import org.example.entity.Loan;
 import org.example.pojo.CustomerFinancialProfile;
 import org.hibernate.Query;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import java.util.List;
 

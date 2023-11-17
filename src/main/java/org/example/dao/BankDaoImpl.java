@@ -2,7 +2,7 @@ package org.example.dao;
 
 import org.example.entity.Bank;
 import org.hibernate.Query;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,6 @@ public class BankDaoImpl implements BankDao {
         }
 
         return Optional.of((Bank) query.list().get(0));
-
     }
 
     @Override

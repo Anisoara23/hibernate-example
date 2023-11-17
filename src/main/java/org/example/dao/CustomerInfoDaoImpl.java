@@ -1,7 +1,7 @@
 package org.example.dao;
 
 import org.example.entity.CustomerInfo;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 public class CustomerInfoDaoImpl implements CustomerInfoDao {
 
