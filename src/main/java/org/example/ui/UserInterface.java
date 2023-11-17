@@ -25,6 +25,7 @@ import org.example.entity.LoanType;
 import org.example.pojo.CustomerFinancialProfile;
 import org.example.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -59,9 +60,12 @@ public class UserInterface {
 
     public void displayUserInterface() {
         boolean continueLoop = true;
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+
         while (continueLoop) {
             try {
-                session = HibernateUtil.getSessionFactory().openSession();
+                session = sessionFactory.openSession();
+                session.beginTransaction();
 
                 accountDao = new AccountDaoImpl(session);
                 bankDao = new BankDaoImpl(session);
@@ -70,7 +74,6 @@ public class UserInterface {
                 loanDao = new LoanDaoImpl(session);
                 financialProfileDao = new FinancialProfileDaoImpl(session);
 
-                session.beginTransaction();
                 System.out.println("\nPlease choose an option: ");
                 System.out.println("1. Apply for a Loan;");
                 System.out.println("2. Apply for an Account;");
@@ -113,12 +116,12 @@ public class UserInterface {
                 System.out.println(e.getMessage());
                 e.printStackTrace();
             } finally {
-                if (session != null) {
+                if (session.isConnected()) {
                     session.close();
                 }
-                HibernateUtil.shutdown();
             }
         }
+        HibernateUtil.shutdown();
     }
 
     private void createAccount() {
@@ -168,6 +171,10 @@ public class UserInterface {
                 loanDao.getCustomersWithLoansIds());
         String loanId = scanner.nextLine();
 
+        if (!financialProfileDao.existsFinancialProfileById(loanId)) {
+            throw new IllegalArgumentException("Loan with id = %s does not exist!".formatted(loanId));
+        }
+
         loanDao.removeLoanById(loanId);
     }
 
@@ -176,6 +183,10 @@ public class UserInterface {
                 "Select account id to be deleted: ",
                 accountDao.getCustomersWithAccountIds());
         String accountId = scanner.nextLine();
+
+        if (!financialProfileDao.existsFinancialProfileById(accountId)) {
+            throw new IllegalArgumentException("Account with id = %s does not exist!".formatted(accountId));
+        }
 
         accountDao.removeAccountById(accountId);
     }
@@ -235,7 +246,7 @@ public class UserInterface {
     private BigDecimal getAmount() {
         System.out.println("\nType amount: ");
         String balance = scanner.nextLine();
-        return new BigDecimal(balance);
+        return balance.equals("") ? null : new BigDecimal(balance);
     }
 
     private Customer getCustomer() {
@@ -375,7 +386,6 @@ public class UserInterface {
 
         Address address = new Address(country, city, street, postalCode);
         Branch branch = new Branch(name, address);
-//        bankDao.addBank(bank);
         branch.setBank(bank);
         bank.getBranches().add(branch);
 

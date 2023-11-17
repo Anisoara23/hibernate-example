@@ -26,6 +26,8 @@ public class BankDaoImpl implements BankDao {
     public Optional<Bank> getBankByCode(String code) {
         Query query = session.createQuery("SELECT b FROM Bank b WHERE b.code = :code");
         query.setParameter("code", code);
+        query.setCacheable(true);
+        query.setCacheRegion("bank");
 
         List list = query.list();
 
@@ -41,6 +43,8 @@ public class BankDaoImpl implements BankDao {
         List<Map<String, String>> mapList = new ArrayList<>();
 
         Query query = session.createQuery("SELECT b FROM Bank b");
+        query.setCacheable(true);
+        query.setCacheRegion("bank");
         List<Bank> banks = query.list();
 
         banks.forEach(

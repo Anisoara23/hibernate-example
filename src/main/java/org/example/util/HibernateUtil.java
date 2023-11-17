@@ -1,7 +1,9 @@
 package org.example.util;
 
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
 
@@ -9,7 +11,11 @@ public class HibernateUtil {
 
     private static SessionFactory buildSessionFactory() {
         try {
-            return new AnnotationConfiguration().configure().buildSessionFactory();
+            Configuration configuration = new Configuration();
+            configuration.configure();
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties()).build();
+            return new Configuration().configure().buildSessionFactory(serviceRegistry);
         } catch (Throwable e) {
             System.err.println("Initial SessionFactory creation failed. " + e);
             throw new ExceptionInInitializerError(e);
