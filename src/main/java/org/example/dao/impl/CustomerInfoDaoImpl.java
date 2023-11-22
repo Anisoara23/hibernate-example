@@ -1,5 +1,6 @@
-package org.example.dao;
+package org.example.dao.impl;
 
+import org.example.dao.CustomerInfoDao;
 import org.example.entity.CustomerInfo;
 import org.hibernate.Session;
 

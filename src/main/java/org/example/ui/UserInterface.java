@@ -1,17 +1,17 @@
 package org.example.ui;
 
 import org.example.dao.AccountDao;
-import org.example.dao.AccountDaoImpl;
+import org.example.dao.impl.AccountDaoImpl;
 import org.example.dao.BankDao;
-import org.example.dao.BankDaoImpl;
+import org.example.dao.impl.BankDaoImpl;
 import org.example.dao.BranchDao;
-import org.example.dao.BranchDaoImpl;
+import org.example.dao.impl.BranchDaoImpl;
 import org.example.dao.CustomerDao;
-import org.example.dao.CustomerDaoImpl;
+import org.example.dao.impl.CustomerDaoImpl;
 import org.example.dao.FinancialProfileDao;
-import org.example.dao.FinancialProfileDaoImpl;
+import org.example.dao.impl.FinancialProfileDaoImpl;
 import org.example.dao.LoanDao;
-import org.example.dao.LoanDaoImpl;
+import org.example.dao.impl.LoanDaoImpl;
 import org.example.entity.Account;
 import org.example.entity.AccountType;
 import org.example.entity.Address;

@@ -1,5 +1,6 @@
-package org.example.dao;
+package org.example.dao.impl;
 
+import org.example.dao.LoanDao;
 import org.example.entity.Loan;
 import org.example.pojo.CustomerFinancialProfile;
 import org.hibernate.Query;
